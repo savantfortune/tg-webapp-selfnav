@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><title>PROBE</title>
+<body style="font:20px monospace;background:#fff;margin:12px">
+<div id="o">checking&hellip;</div>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+(function(){
+  function report(){
+    var t = window.Telegram && Telegram.WebApp;
+    var lines = ['origin: '+location.origin, 'Telegram.WebApp: '+(t?'YES':'NO')];
+    if(t){
+      try{ lines.push('platform: '+t.platform); }catch(e){ lines.push('platform: ERR'); }
+      try{ lines.push('initData len: '+(t.initData||'').length); }catch(e){}
+      try{ lines.push('version: '+t.version); }catch(e){}
+    }
+    document.getElementById('o').textContent = lines.join('  |  ');
+    document.title = 'PROBE '+(t?'BRIDGE':'NOBRIDGE');
+    try{
+      if(t){ t.ready(); setTimeout(function(){ t.openPopup({title:'BRIDGE ALIVE', message:'cross-origin bridge accepted', buttons:[{type:'close'}]}); }, 800); }
+    }catch(e){}
+  }
+  if(window.Telegram && Telegram.WebApp){ report(); } else { setTimeout(report, 1200); setTimeout(report, 3000); }
+})();
+</script>
