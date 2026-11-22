@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"><title>MAINPROBE</title>
+<body style="font:26px monospace;background:#fff;margin:12px">
+<div id="o">main-probe starting...</div>
+<script>
+(function(){
+  var received = [];
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    try { d = typeof d === 'string' ? JSON.parse(d) : d; } catch(err) {}
+    received.push((d && d.eventType) || String(d).slice(0,40));
+    render();
+  });
+  function send(ev, data){
+    try { window.parent.postMessage(JSON.stringify({eventType: ev, eventData: data || ''}), '*'); } catch(e){}
+  }
+  function render(){
+    document.getElementById('o').textContent =
+      'CONTROL origin: ' + location.origin +
+      ' | parent events: ' + (received.join(',') || 'NONE') +
+      ' | nav in ' + Math.max(0, Math.ceil((navAt - Date.now())/1000)) + 's';
+  }
+  var navAt = Date.now() + 4000;
+  render();
+  setTimeout(function(){ send('web_app_request_theme'); send('web_app_request_viewport'); }, 400);
+  setTimeout(function(){ send('web_app_open_popup', {title:'BRIDGE ALIVE', message:'same-origin control accepted (main-app open)', buttons:[{type:'close', id:'b'}]}); }, 1200);
+  setTimeout(render, 2000);
+  setTimeout(render, 3000);
+  setTimeout(function(){ window.location = 'https://raw.githack.com/savantfortune/tg-webapp-selfnav/main/target2.html'; }, 4000);
+})();
+</script>
