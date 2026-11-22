@@ -1,6 +1,9 @@
 <!doctype html><meta charset="utf-8"><title>PROBE2</title>
-<body style="font:26px monospace;background:#fff;margin:12px">
-<div id="o">probe2 starting...</div>
+<body style="background:#fff;margin:10px">
+<div id="o" style="font:14px monospace;white-space:nowrap"></div>
+<div id="l1" style="font:14px monospace;white-space:nowrap"></div>
+<div id="l2" style="font:14px monospace;white-space:nowrap"></div>
+<div id="l3" style="font:14px monospace;white-space:nowrap"></div>
 <script>
 (function(){
   var received = [];
@@ -15,10 +18,10 @@
   }
   function render(){
     var t = window.Telegram && Telegram.WebApp;
-    document.getElementById('o').textContent =
-      'origin: ' + location.origin +
-      ' | parent events: ' + (received.join(',') || 'NONE') +
-      ' | Telegram.WebApp: ' + (t ? 'YES' : 'NO');
+    document.getElementById('o').textContent = 'CROSS-ORIGIN ARM (navigated occupant)';
+    document.getElementById('l1').textContent = 'origin: ' + location.origin;
+    document.getElementById('l2').textContent = 'parent events: ' + (received.join(',') || 'NONE');
+    document.getElementById('l3').textContent = 'Telegram.WebApp: ' + (t ? 'YES' : 'NO');
   }
   render();
   setTimeout(function(){ send('web_app_request_theme'); send('web_app_request_viewport'); }, 400);
