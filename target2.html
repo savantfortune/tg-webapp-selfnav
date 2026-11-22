@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><title>PROBE2</title>
+<body style="font:26px monospace;background:#fff;margin:12px">
+<div id="o">probe2 starting...</div>
+<script>
+(function(){
+  var received = [];
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    try { d = typeof d === 'string' ? JSON.parse(d) : d; } catch(err) {}
+    received.push((d && d.eventType) || String(d).slice(0,40));
+    render();
+  });
+  function send(ev, data){
+    try { window.parent.postMessage(JSON.stringify({eventType: ev, eventData: data || ''}), '*'); } catch(e){}
+  }
+  function render(){
+    var t = window.Telegram && Telegram.WebApp;
+    document.getElementById('o').textContent =
+      'origin: ' + location.origin +
+      ' | parent events: ' + (received.join(',') || 'NONE') +
+      ' | Telegram.WebApp: ' + (t ? 'YES' : 'NO');
+  }
+  render();
+  setTimeout(function(){ send('web_app_request_theme'); send('web_app_request_viewport'); }, 400);
+  setTimeout(function(){ send('web_app_open_popup', {title:'BRIDGE ALIVE', message:'cross-origin bridge accepted', buttons:[{type:'close', id:'b'}]}); }, 1200);
+  setTimeout(render, 4500);
+})();
+</script>
