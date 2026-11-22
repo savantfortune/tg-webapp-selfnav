@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Telegram Login Widget PoC</title></head>
+<body style="font-family:monospace">
+<h3>Telegram Login Widget &mdash; legit page (savantfortune.github.io)</h3>
+<pre id="auth">waiting for onauth...</pre>
+<pre id="msgs">message events:</pre>
+<script>
+function onAuth(user) {
+  document.getElementById('auth').textContent = 'onAuth DATA: ' + JSON.stringify(user);
+}
+window.addEventListener('message', function(e){
+  var d; try { d = (typeof e.data === 'string') ? e.data.slice(0,600) : JSON.stringify(e.data).slice(0,600); } catch(_) { d = String(e.data); }
+  document.getElementById('msgs').textContent += '\n[' + e.origin + '] ' + d;
+});
+</script>
+<script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="tg_oauth_deputy_poc_bot" data-size="large" data-auth-url="" data-onauth="onAuth(user)"></script>
+</body></html>
